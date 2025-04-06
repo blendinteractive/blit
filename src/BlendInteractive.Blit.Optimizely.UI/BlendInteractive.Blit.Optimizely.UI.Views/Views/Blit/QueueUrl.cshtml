@@ -1,0 +1,27 @@
+@using BlendInteractive.Blit.Optimizely.UI.Models
+@model QueueUrlViewModel
+@{
+    ViewBag.PageTitle = "Queue New URL";
+}
+
+
+<form method="post" action="">
+    @Html.AntiForgeryToken()
+    <div class="mb-3">
+        <label asp-for="VariblesJson" class="form-label">Variables JSON</label>
+        <p>Please enter a JSON object of key-value pairs. For example: <code>{ "homepage-id": "5", "site-name": "example-site" }</code></p>
+        <textarea asp-for="VariblesJson" rows="10" cols="40" class="form-control"></textarea>
+    </div>
+    <div class="mb-3">
+        <label asp-for="FriendlyName" class="form-label">Friendly Name</label>
+        <input asp-for="FriendlyName" type="text" class="form-control" />
+    </div>
+    <div class="mb-3">
+        <label asp-for="Url" class="form-label">Url</label>
+        <input asp-for="Url" type="text" class="form-control" />
+    </div>
+    <button type="submit" class="btn btn-primary">Queue Url</button>
+    <a href="@Model.Link(null)" class="btn btn-outline-danger">Cancel</a>
+</form>
+
+

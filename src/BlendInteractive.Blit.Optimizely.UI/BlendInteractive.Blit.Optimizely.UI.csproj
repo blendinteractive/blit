@@ -1,0 +1,85 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <AddRazorSupportForMvc>true</AddRazorSupportForMvc>
+    <UiZipPath>..\..\artifacts\ui-zip</UiZipPath>
+    <UiSourcePath>..\static</UiSourcePath>
+    <ExampleSitePath>..\..\examples\ExampleSite\modules\_protected\BlendInteractive.Blit.Optimizely.UI</ExampleSitePath>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+	<PackageReference Include="EPiServer.CMS.AspNetCore" Version="[12.4.0,13.0)" />
+	<PackageReference Include="EPiServer.CMS.UI.Core" Version="[12.4.0,13.0)" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="BlendInteractive.Blit.Optimizely.UI.Views\Views\Shared\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\BlendInteractive.Blit.Optimizely\BlendInteractive.Blit.Optimizely.csproj" />
+    <ProjectReference Include="..\BlendInteractive.Blit\BlendInteractive.Blit.csproj" />
+  </ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Microsoft.SourceLink.GitHub" Version="8.0.0">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+	</ItemGroup>
+
+  <!-- UI Build -->
+  <Target Name="UiBuild" BeforeTargets="Build">
+
+    <!-- Copy the blank-slate module.config into a temporary zip folder, poke in the appropriate version number -->
+		<Copy SourceFiles="..\..\module.config" DestinationFolder="$(UiZipPath)" />
+		<XmlPoke XmlInputPath="$(UiZipPath)\module.config" Query="/module/@clientResourceRelativePath" Value="$(PackageVersion)" />
+
+		<!-- Ensure directories exist -->
+		<MakeDir Directories="$(UiZipPath)\$(PackageVersion)" Condition="!Exists('$(UiZipPath)\$(PackageVersion)')" />
+		<MakeDir Directories="$(UiZipPath)\$(PackageVersion)\ClientResources" Condition="!Exists('$(UiZipPath)\$(PackageVersion)\ClientResources')" />
+
+    <!-- Copy over static files-->
+		<Copy SourceFiles="$(UiSourcePath)\blend-logo.png" DestinationFolder="$(UiZipPath)\$(PackageVersion)\ClientResources" />
+    <Copy SourceFiles="$(UiSourcePath)\blend-main.css" DestinationFolder="$(UiZipPath)\$(PackageVersion)\ClientResources" />
+
+    <!-- Zip the file up into the example site and project -->
+		<ZipDirectory SourceDirectory="$(UiZipPath)" DestinationFile="$(ProjectDir)$(MSBuildProjectName).zip" Overwrite="true" />
+		<ZipDirectory SourceDirectory="$(UiZipPath)" DestinationFile="$(ExampleSitePath)\$(MSBuildProjectName).zip" Overwrite="true" />
+  </Target>
+
+
+  <!-- Include UI in packaging -->
+  <ItemGroup>
+		<Content Include="$(MSBuildProjectName).zip" Condition="'$(UseLocalPackage)' != ''">
+			<Pack>true</Pack>
+			<PackagePath>contentFiles\any\any\modules\_protected\$(MSBuildProjectName)</PackagePath>
+			<BuildAction>None</BuildAction>
+			<PackageCopyToOutput>true</PackageCopyToOutput>
+		</Content>
+		<Content Include="..\..\CopyZipFile.targets" Condition="'$(UseLocalPackage)' != ''">
+			<Pack>true</Pack>
+			<PackagePath>build\BlendInteractive.Import.Optimizely.UI.targets</PackagePath>
+		</Content>
+	</ItemGroup>
+
+  	<ItemGroup>
+		<None Include="..\..\License">
+			<Pack>True</Pack>
+			<PackagePath></PackagePath>
+		</None>
+		<None Include="..\..\README.md">
+			<Pack>True</Pack>
+			<PackagePath></PackagePath>
+		</None>
+		<None Include="..\..\icon.png">
+			<Pack>True</Pack>
+			<PackagePath></PackagePath>
+		</None>
+	</ItemGroup>
+
+</Project>

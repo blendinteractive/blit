@@ -1,0 +1,40 @@
+@using BlendInteractive.Blit.Optimizely.UI.Models
+@model IndexViewModule
+@{
+    ViewBag.PageTitle = "BLIT Dashboard";
+}
+
+<div class="container">
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Age</th>
+                <th>State</th>
+                <th>Progress</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach(var row in Model.Batches)
+            {
+                var link = Model.Link("viewBatch") + "?batchId=" + row.Id.ToString();
+                <tr>
+                    <td><a href="@link">@row.FriendlyName</a></td>
+                    <td>@row.Age</td>
+                    <td>@row.StateString</td>
+                    <td>@row.ProgressPercent</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <hr />
+
+    <h2>Actions</h2>
+
+    <p>
+        <a href="@Model.Link("queueurl")" class="btn btn-light">Queue new URL</a>
+        @* <a href="@Model.Link("queuecontent")" class="btn btn-light">Queue new Content</a> *@
+        <a href="@Model.Link("globalVars")" class="btn btn-light">Edit Global Variables</a>
+    </p>
+</div>

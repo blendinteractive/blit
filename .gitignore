@@ -1,0 +1,17 @@
+# Directories must exist for build
+/artifacts/packages/*
+!/artifacts/packages/.gitkeep
+
+/artifacts/ui-zip/*
+!/artifacts/ui-zip/.gitkeep
+
+/examples/ExampleSite/modules/_protected/BlendInteractive.Blit.Optimizely.UI/*
+!/examples/ExampleSite/modules/_protected/BlendInteractive.Blit.Optimizely.UI/.gitkeep
+
+# VS artifacts
+bin/
+obj/
+*.user
+*.suo
+.vs/
+*.zip

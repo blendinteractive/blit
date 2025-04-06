@@ -1,0 +1,32 @@
+<Project>
+
+  <PropertyGroup>
+	  <Nullable>enable</Nullable>
+
+	  <Version>1.0.0</Version>
+	  <PackageVersion>1.0.0</PackageVersion>
+	  <AssemblyVersion>1.0.0.0</AssemblyVersion>
+	  <FileVersion>1.0.0.0</FileVersion>
+	  <Authors>Blend Interactive</Authors>
+	  <Company>Blend Interactive</Company>
+	  
+	  <GenerateDocumentationFile>False</GenerateDocumentationFile>
+	  <GeneratePackageOnBuild>False</GeneratePackageOnBuild>
+	  
+	  <PackageProjectUrl>https://github.com/blendinteractive/blit</PackageProjectUrl>
+	  <RepositoryUrl>https://github.com/blendinteractive/blit.git</RepositoryUrl>
+	  <RepositoryType>git</RepositoryType>
+	  <PackageTags>Optimizely</PackageTags>
+	  <IsPackable>true</IsPackable>
+
+      <EmbedUntrackedSources>true</EmbedUntrackedSources>
+      <PackageIcon>icon.png</PackageIcon>
+      <PackageLicenseFile>License</PackageLicenseFile>
+      <PackageReadmeFile>README.md</PackageReadmeFile>
+      <PackageIconUrl />
+
+	  <IncludeSymbols>true</IncludeSymbols>
+	  <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+  </PropertyGroup>
+
+</Project>

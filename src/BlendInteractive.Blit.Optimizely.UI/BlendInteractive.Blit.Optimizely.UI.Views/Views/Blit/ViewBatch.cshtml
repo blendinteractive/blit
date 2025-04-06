@@ -1,0 +1,29 @@
+@using BlendInteractive.Blit.Optimizely.UI.Models
+@model ViewBatchViewModel
+@{
+    ViewBag.PageTitle = Model.Details!.FriendlyName;
+}
+
+<p>Status: @Model.Details.StateString</p>
+
+<textarea class="form-control" rows="10" cols="40">@Model.Log</textarea>
+
+@if (Model.Details.State == BlendInteractive.Blit.Optimizely.BatchState.Complete)
+{
+    <form method="post" action="@Model.Link("Requeue")">
+        @Html.AntiForgeryToken()
+        <input type="hidden" asp-for="BatchId" />
+        <button type="submit" class="btn btn-primary">Requeue</button>
+    </form>
+}
+
+@if (Model.Details.State != BlendInteractive.Blit.Optimizely.BatchState.InProgress)
+{
+    <form method="post" action="@Model.Link("Delete")">
+        @Html.AntiForgeryToken()
+        <input type="hidden" asp-for="BatchId" />
+        <button type="submit" class="btn btn-primary">Delete</button>
+    </form>
+}
+
+<p><a href="@Model.Link(null)">Back</a></p>

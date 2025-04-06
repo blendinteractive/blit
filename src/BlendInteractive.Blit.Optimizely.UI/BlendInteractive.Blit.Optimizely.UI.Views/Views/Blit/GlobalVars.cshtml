@@ -1,0 +1,17 @@
+@using BlendInteractive.Blit.Optimizely.UI.Models
+@model GlobalVarsViewModel
+@{
+    ViewBag.PageTitle = "Global Variables";
+}
+
+<p>Please enter a JSON object of key-value pairs. For example: <code>{ "homepage-id": "5", "site-name": "example-site" }</code></p>
+
+<form method="post" action="">
+    @Html.AntiForgeryToken()
+    <div class="mb-3">
+        <label asp-for="VariblesJson" class="form-label">Variables JSON</label>
+        <textarea asp-for="VariblesJson" rows="10" cols="40" class="form-control"></textarea>
+    </div>
+    <button type="submit" class="btn btn-primary">Update</button>
+    <a href="@Model.Link(null)" class="btn btn-outline-danger">Cancel</a>
+</form>
