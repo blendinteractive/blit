@@ -31,6 +31,8 @@ public class ArticlePage : PageData
     public virtual ExampleEnum ExampleEnum { get; set; }
 
     public virtual int? ExampleInteger { get; set; }
+
+    public virtual IList<ContentReference>? ExampleContentReferenceList { get; set; }
 }
 
 public enum ExampleEnum

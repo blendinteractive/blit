@@ -45,6 +45,26 @@ var blogPostPage = Content
             cats.Add(CategoryPathReference.Create("Sections", "News Article", "Best Articles"));
         });
 
+        // Testing a few property types
+        p.Text(x => x.ExampleInteger, "-10");
+        p.Text(x => x.ExampleEnum, ExampleEnum.ValueTwo.ToString());
+        p.Text(x => x.ExampleUrlProperty, "https://www.blendinteractive.com/");
+        p.Text(x => x.ExampleReference, new VariableReference("homepage-id")); // Could also use a content query here.
+
+        // As an example, adding a reference to the homepage two different ways
+        p.List(x => x.ExampleContentReferenceList, refs =>
+        {
+            // As a content query
+            refs.Add(
+                ContentQuery.Build()
+                    .Id(new VariableReference("homepage-id"))
+                    .AsFragment(ContentEmbedType.ID, "")
+            );
+
+            // Or as a direct text value. As long as the text value parses to a valid
+            // page ID, this will work.
+            refs.Add(new VariableReference("homepage-id"));
+        });
     })
 
     

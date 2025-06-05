@@ -370,7 +370,7 @@ public class ContentImportService
                 contentArea = new ContentArea();
 
             var itemIds = contentArea.Items.Select(x => x.ContentLink.ID);
-            var newIds = newTextValue.Select(x => int.Parse(x));
+            var newIds = newTextValue.Select(int.Parse);
 
             if (itemIds.SequenceEqual(newIds))
                 return (null, false);
@@ -389,7 +389,7 @@ public class ContentImportService
 
         if (typeof(CategoryList).IsAssignableFrom(propertyType))
         {
-            var newIds = newTextValue.Select(x => int.Parse(x));
+            var newIds = newTextValue.Select(int.Parse);
             var categoryList = existingValue as CategoryList;
             if (categoryList == null)
                 categoryList = new CategoryList();
@@ -403,6 +403,27 @@ public class ContentImportService
                 categoryList.Add(newId);
 
             return (categoryList, true);
+        }
+
+        if (typeof(IList<ContentReference>).IsAssignableFrom(propertyType))
+        {
+            IList<ContentReference>? contentList = existingValue as IList<ContentReference>;
+            if (contentList == null)
+                contentList = new List<ContentReference>();
+
+            var itemIds = contentList.Select(x => x.ID);
+            var newIds = newTextValue.Select(int.Parse);
+
+            if (itemIds.SequenceEqual(newIds))
+                return (null, false);
+
+            contentList.Clear();
+            foreach (var newId in newIds)
+            {
+                contentList.Add(new ContentReference(newId));
+            }
+
+            return (contentList, true);
         }
 
         throw new NotImplementedException($"Unable to set property type {propertyType.FullName}");
