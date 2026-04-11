@@ -3,6 +3,7 @@ using EPiServer.Web;
 using EPiServer;
 using System.Text;
 using System.Xml.Serialization;
+using EPiServer.Applications;
 
 namespace BlendInteractive.Blit.Optimizely;
 
@@ -10,13 +11,13 @@ public class ContentLoaderQueryResolver : IContentQueryResolver
 {
     private readonly IContentLoader contentLoader;
     private readonly ContentAssetHelper contentAssetHelper;
-    private readonly ISiteDefinitionRepository siteDefinitionRepository;
+    private readonly IApplicationRepository applicationRepository;
 
-    public ContentLoaderQueryResolver(IContentLoader contentLoader, ContentAssetHelper contentAssetHelper, ISiteDefinitionRepository siteDefinitionRepository)
+    public ContentLoaderQueryResolver(IContentLoader contentLoader, ContentAssetHelper contentAssetHelper, IApplicationRepository applicationRepository)
     {
         this.contentLoader = contentLoader;
         this.contentAssetHelper = contentAssetHelper;
-        this.siteDefinitionRepository = siteDefinitionRepository;
+        this.applicationRepository = applicationRepository;
     }
 
     public ContentReference? FindReference(ImportContext context, ContentQuery query)
@@ -29,6 +30,26 @@ public class ContentLoaderQueryResolver : IContentQueryResolver
 
         var foundContent = FindContent(context, query);
         return foundContent?.ContentLink;
+    }
+
+    private bool IsDefaultApplication(Application app)
+    {
+        return app switch
+        {
+            InProcessWebsite inProc => inProc.IsDefault,
+            Website webSite => webSite.IsDefault,
+            _ => false
+        };
+    }
+
+    private ContentReference? GetApplicationAssetsRoot(Application app)
+    {
+        return app switch
+        {
+            InProcessWebsite inProc => inProc.AssetsRoot,
+            Website webSite => webSite.AssetsRoot,
+            _ => null
+        };
     }
 
     public IContent? FindContent(ImportContext context, ContentQuery contentQuery)
@@ -57,22 +78,22 @@ public class ContentLoaderQueryResolver : IContentQueryResolver
         {
 
             var siteId = ResolveFragments(context, forThisSite.SiteId);
-            SiteDefinition? currentSite;
+            Application? currentSite;
             if (string.IsNullOrEmpty(siteId))
             {
-                currentSite = siteDefinitionRepository.List().FirstOrDefault(x => x.Hosts.Any(y => y.IsWildcardHost()));
+                currentSite = applicationRepository.List().FirstOrDefault(IsDefaultApplication);
             }
             else
             {
-                Guid guid = Guid.Parse(siteId);
-                currentSite = siteDefinitionRepository.Get(guid);
+                currentSite = applicationRepository.Get(siteId);
             }
 
 
             if (currentSite == null)
                 throw new InvalidOperationException("Could not locate site");
 
-            var root = !ContentReference.IsNullOrEmpty(currentSite.SiteAssetsRoot) ? currentSite.SiteAssetsRoot : currentSite.GlobalAssetsRoot;
+            var siteAssetsRoot = GetApplicationAssetsRoot(currentSite);
+            var root = !ContentReference.IsNullOrEmpty(siteAssetsRoot) ? siteAssetsRoot : SystemDefinition.Current.GlobalAssetsRoot;
 
             var folder = contentLoader.Get<IContent>(root);
             return folder;
@@ -97,7 +118,7 @@ public class ContentLoaderQueryResolver : IContentQueryResolver
         }
         else
         {
-            query = AllContent(SiteDefinition.Current.RootPage);
+            query = AllContent(SystemDefinition.Current.RootPage);
         }
 
         // Apply additional filters

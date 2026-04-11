@@ -9,7 +9,7 @@ Blit is a content migration utility by Blend Interactive which is designed to he
 * Link resolution - Blit can find and resolve internal links into permanent URLs, even for content that doesn't exist yet (see next point).
 * Two-stage import - Blit first imports the bare-bones necessary for content to exist, then runs a second pass in which any properties that may depend on other imported content are resolved.
 
-**Blit is currently in beta and only supports Optimizely CMS version 12.**
+**Blit currently supports Optimizely CMS version 12 and 13.**
 
 ## How it works
 

@@ -1,6 +1,7 @@
 using BlendInteractive.Blit.Optimizely.UI;
 using EPiServer.Cms.Shell;
 using EPiServer.Cms.UI.AspNetIdentity;
+using EPiServer.DependencyInjection;
 using EPiServer.Licensing.Services;
 using EPiServer.Scheduler;
 using EPiServer.ServiceLocation;

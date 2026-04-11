@@ -3,11 +3,11 @@
   <PropertyGroup>
 	  <Nullable>enable</Nullable>
 
-	  <Version>1.1.0</Version>
-	  <PackageVersion>1.1.0</PackageVersion>
-	  <AssemblyVersion>1.1.0.0</AssemblyVersion>
-	  <FileVersion>1.1.0.0</FileVersion>
-      <PackageReleaseNotes>Adds support for IList&lt;ContentReference&gt; properties</PackageReleaseNotes>
+	  <Version>2.0.0</Version>
+	  <PackageVersion>2.0.0</PackageVersion>
+	  <AssemblyVersion>2.0.0.0</AssemblyVersion>
+	  <FileVersion>2.0.0.0</FileVersion>
+      <PackageReleaseNotes>Upgrades target to Optimizely CMS 13 and .NET 10</PackageReleaseNotes>
 
 	  <Authors>Blend Interactive</Authors>
 	  <Company>Blend Interactive</Company>

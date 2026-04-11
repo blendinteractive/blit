@@ -34,9 +34,9 @@ public class TypedContentBuilder<T>
         public TypedContentBuilderStep3 SkipParentQuery()
             => new TypedContentBuilderStep3(id, actions, query, null);
 
-        public TypedContentBuilderStep3 ParentQuery(Action<TypedContentQueryBuilder<T>> parentQuery)
+        public TypedContentBuilderStep3 ParentQuery(Action<ContentQueryBuilder> parentQuery)
         {
-            var builder = new TypedContentQueryBuilder<T>();
+            var builder = new ContentQueryBuilder();
             parentQuery(builder);
             return new TypedContentBuilderStep3(id, actions, query, new ContentQuery(builder.Done()));
         }

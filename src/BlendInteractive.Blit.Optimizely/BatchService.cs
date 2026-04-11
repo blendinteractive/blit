@@ -1,11 +1,12 @@
 ﻿using BlendInteractive.Blit.Optimizely.Data;
-using System.Net;
 using System.Text;
 
 namespace BlendInteractive.Blit.Optimizely;
 
 public class BatchService : IBatchService
 {
+    private static readonly HttpClient _httpClient = new HttpClient();
+
     private readonly DatastoreFactory datastore;
     private readonly IContentSerializer contentSerializer;
 
@@ -20,9 +21,13 @@ public class BatchService : IBatchService
         if (path.StartsWith("https://", StringComparison.InvariantCultureIgnoreCase)
            || path.StartsWith("http://", StringComparison.InvariantCultureIgnoreCase))
         {
-            WebClient client = new WebClient();
-            var contents = client.DownloadString(path);
-            return contents;
+            // Sync over async here. Less than ideal, but acceptible because this is only
+            // ever run from a scheduled job.
+            return _httpClient
+                .GetStringAsync(path)
+                .ConfigureAwait(false)
+                .GetAwaiter()
+                .GetResult();
         }
         else
         {
