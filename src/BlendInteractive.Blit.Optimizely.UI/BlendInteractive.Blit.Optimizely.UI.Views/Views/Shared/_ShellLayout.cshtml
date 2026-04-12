@@ -1,7 +1,10 @@
+@addTagHelper *, EPiServer.Shell.UI
+
 @using EPiServer.Framework.Web.Resources
 @using EPiServer.Shell
 @using EPiServer.Shell.Navigation
 @using EPiServer.Framework.Web.Mvc.Html
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -22,10 +25,9 @@
     @ClientResources.RenderResources("blit-styles", new[] { ClientResourceType.Style })
 </head>
 <body>
-    @* Html.CreatePlatformNavigationMenu() *@
+    <platform-navigation />
 
-    <div @* @Html.ApplyPlatformNavigation() *@>
-
+    <platform-navigation-wrapper>
         <div class="blend-redirect-manager-wrap">
             <div class="blend-admin-header page-header">
                 <div class="container">
@@ -68,7 +70,7 @@
             </div>
         </div>
 
-    </div>
+    </platform-navigation-wrapper>
 
     @Html.RequiredClientResources("Footer")
 </body>
